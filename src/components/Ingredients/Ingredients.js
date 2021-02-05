@@ -9,8 +9,18 @@ function Ingredients() {
     const [someTestNumber, setSomeTestNumber] = useState(1);
 
     const addIngredientHandler = (ingredient) => {
-        setUserIngredients([...userIngredients, {id: Math.random().valueOf().toString(), ...ingredient}]);
-    }
+        fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json", {
+            method:'POST',
+            body: JSON.stringify(ingredient),
+            headers:{
+              'Content-Type':'application/json'
+            }
+        }).then(response =>{
+            response.json();
+        }).then(ingredientFromFirebase=>{
+            setUserIngredients([...userIngredients, {id: ingredientFromFirebase.name, ...ingredient}]);
+        })
+    };
 
     const removeIngredientFromList = (id) => {
         let ingredientIndex = userIngredients.findIndex(ingredient => ingredient.id === id)
