@@ -16,22 +16,37 @@ function Ingredients() {
               'Content-Type':'application/json'
             }
         }).then(response =>{
-            response.json();
-        }).then(ingredientFromFirebase=>{
-            setUserIngredients([...userIngredients, {id: ingredientFromFirebase.name, ...ingredient}]);
+            return response.json();
+        }).then(response=>{
+            setUserIngredients([...userIngredients, {id: response.name, ...ingredient}]);
         })
     };
 
+    useEffect(()=>{
+        fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json")
+            .then(response=>response.json())
+            .then( ingredientsFromDb =>{
+                const ingredientsList = [];
+                console.log(ingredientsFromDb);
+                for(let key in ingredientsFromDb){
+                    ingredientsList.push({id:key, amount: ingredientsFromDb[key].amount, title: ingredientsFromDb[key].title})
+                }
+                setUserIngredients(ingredientsList)
+            }
+        )
+    },[]);
+
+
     const removeIngredientFromList = (id) => {
-        let ingredientIndex = userIngredients.findIndex(ingredient => ingredient.id === id)
+        let ingredientIndex = userIngredients.findIndex(ingredient => ingredient.id === id);
         let ingredientsList  = [...userIngredients];
         ingredientsList.splice(ingredientIndex, 1);
         setUserIngredients(ingredientsList)
-    }
+    };
 
     useEffect(() => {
         setSomeTestNumber(69)
-    })
+    });
 
     return (
         <div className="App">
