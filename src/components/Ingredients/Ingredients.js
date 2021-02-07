@@ -7,19 +7,19 @@ import Search from './Search';
 function Ingredients() {
     const [userIngredients, setUserIngredients] = useState([]);
 
-    // const addIngredientHandler = (ingredient) => {
-    //     fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json", {
-    //         method:'POST',
-    //         body: JSON.stringify(ingredient),
-    //         headers:{
-    //           'Content-Type':'application/json'
-    //         }
-    //     }).then(response =>{
-    //         return response.json();
-    //     }).then(response=>{
-    //         setUserIngredients([...userIngredients, {id: response.name, ...ingredient}]);
-    //     })
-    // };
+    const addIngredientHandler = (ingredient) => {
+        fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json", {
+            method:'POST',
+            body: JSON.stringify(ingredient),
+            headers:{
+              'Content-Type':'application/json'
+            }
+        }).then(response =>{
+            return response.json();
+        }).then(response=>{
+            setUserIngredients([...userIngredients, {id: response.name, ...ingredient}]);
+        });
+    };
 
     useEffect(()=>{
         fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json")
@@ -48,7 +48,7 @@ function Ingredients() {
 
     return (
         <div className="App">
-            <IngredientForm/>
+            <IngredientForm onAddIngredients={addIngredientHandler}/>
             <section>
                 <Search onLoadIngredients={getFilteredIngredientsList} />
                 <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
