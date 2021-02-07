@@ -9,7 +9,6 @@ const IngredientForm = React.memo(props => {
 
     const submitHandler = event => {
         event.preventDefault();
-        props.onAddIngredient({ title: enteredTitle, amount: enteredAmount });
     };
 
     return (
@@ -17,7 +16,7 @@ const IngredientForm = React.memo(props => {
             <Card>
                 <form onSubmit={submitHandler}>
                     <div className="form-control">
-                        <label htmlFor="title">Name {props.someTestNumber}</label>
+                        <label htmlFor="title">Name </label>
                         <input
                             type="text"
                             id="title"
