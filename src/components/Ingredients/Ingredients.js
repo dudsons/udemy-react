@@ -38,8 +38,11 @@ function Ingredients() {
     const removeIngredientFromList = (id) => {
         let ingredientIndex = userIngredients.findIndex(ingredient => ingredient.id === id);
         let ingredientsList  = [...userIngredients];
-        ingredientsList.splice(ingredientIndex, 1);
-        setUserIngredients(ingredientsList)
+        fetch(`https://react-hook-upda-default-rtdb.firebaseio.com/ingredients/${id}.json`,
+            {method:"DELETE"})
+            .then(()=>
+                setUserIngredients([...userIngredients.filter(ingredient =>ingredient.id !== id)])
+                );
     };
 
     const getFilteredIngredientsList =useCallback((filteredList) =>{
