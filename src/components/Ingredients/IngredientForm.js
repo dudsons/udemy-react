@@ -14,6 +14,7 @@ const IngredientForm = React.memo(props => {
         props.onAddIngredients({title: enteredTitle,amount:enteredAmount});
     };
 
+
     return (
         <section className="ingredient-form">
             <Card>
