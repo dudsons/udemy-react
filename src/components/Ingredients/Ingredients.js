@@ -27,23 +27,47 @@ const userIngredientReducer = (userIngredients, action) => {
     }
 };
 
+const httpReducerHandler = (httpReducer, action) => {
+    switch (action.type) {
+        case 'SEND':
+            return { loading: true, error: null };
+        case 'RESPONSE':
+            return { ...httpReducer, loading: false };
+        case 'ERROR':
+            return { loading: false, error: action.errorMessage };
+        case 'CLOSE':
+            return { ...httpReducer, error: null };
+        default:
+            throw new Error('Should not be reached!');
+    }
+};
+
+
 function Ingredients() {
     const [userIngredients, dispatchForIngredients] = useReducer(userIngredientReducer, []);
 
     // const [userIngredients, setUserIngredients] = useState([]);
-    const [isIndicator, setIsIndicator] = useState(false);
-    const [error, setError] = useState(undefined);
+    // const [isIndicator, setIsIndicator] = useState(false);
+    // const [error, setError] = useState(undefined);
     const [someText, dispatch] = useReducer(textReducer, "A");
+    const [httpState, dispatchHttpState] = useReducer(httpReducerHandler,
+        {
+            isIndicator: false,
+            error: "aaa"});
+
 
     //get start list
     useEffect(() => {
-        setIsIndicator(true);
+        // setIsIndicator(true);
+        console.log(httpState);
+        dispatchHttpState({type: "SEND"});
         fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json")
             .then(
                 response => response.json()
             )
             .then(ingredientsFromDb => {
-                    setIsIndicator(false);
+                    // setIsIndicator(false);
+                    dispatchHttpState({type: "RESPONSE"});
                     const ingredientsList = [];
                     for (let key in ingredientsFromDb) {
                         ingredientsList.push({
@@ -52,17 +76,18 @@ function Ingredients() {
                             title: ingredientsFromDb[key].title
                         })
                     }
-                    dispatchForIngredients({type: "SET", ingredientsList: ingredientsList})
-                    // setUserIngredients(ingredientsList)
+                // setUserIngredients(ingredientsList)
+                dispatchForIngredients({type: "SET", ingredientsList: ingredientsList})
                 }
             ).catch(error => {
-            setError(error.message);
+            dispatchHttpState({type: "ERROR", errorMessage: `Error when getting start list: `});
         })
     }, []);
 
 
     const addIngredientHandler = (ingredient) => {
-        setIsIndicator(true);
+        // setIsIndicator(true);
+        dispatchHttpState({type: "SEND"});
         fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json", {
             method: 'POST',
             body: JSON.stringify(ingredient),
@@ -70,33 +95,37 @@ function Ingredients() {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
-            setIsIndicator(false);
+            // setIsIndicator(false);
+            dispatchHttpState({type: "RESPONSE"});
             return response.json();
         }).then(response => {
-            dispatchForIngredients({type:"ADD", ingredient:{id: response.name, ...ingredient}})
             // setUserIngredients([...userIngredients, {id: response.name, ...ingredient}]);
+            dispatchForIngredients({type: "ADD", ingredient: {id: response.name, ...ingredient}})
         });
     };
 
 
     const removeIngredientFromList = (id) => {
-        setIsIndicator(true);
+        // setIsIndicator(true);
+        dispatchHttpState({type: "SEND"});
         fetch(`https://react-hook-upda-default-rtdb.firebaseio.com/ingredients/${id}.json`,
             {method: "DELETE"})
             .then(() => {
-                    dispatchForIngredients({type:"DELETE", id:id});
-                    setIsIndicator(false);
+                    dispatchForIngredients({type: "DELETE", id: id});
+                    // setIsIndicator(false);
+                    dispatchHttpState({type: "RESPONSE"});
                 }
             );
     };
 
     const getFilteredIngredientsList = useCallback((filteredList) => {
-        dispatchForIngredients({type:"SET",ingredientsList:filteredList})
+        dispatchForIngredients({type: "SET", ingredientsList: filteredList})
     }, []);
 
     const closeAlarm = () => {
-        setError(undefined);
-        setIsIndicator(false);
+        // setError(undefined);
+        // setIsIndicator(false);
+        dispatchHttpState({type:"CLOSE"})
     };
 
     return (
@@ -106,8 +135,8 @@ function Ingredients() {
             }}> UseReducer
             </button>
             <div>Reducer value is {someText}</div>
-            {error && <ErrorModal children={error} onClose={closeAlarm}/>}
-            <IngredientForm onAddIngredients={addIngredientHandler} onIndicator={isIndicator} onError={error}/>
+            {httpState.error && <ErrorModal children={httpState.error} onClose={closeAlarm}/>}
+            <IngredientForm onAddIngredients={addIngredientHandler} onIndicator={httpState.isIndicator} onError={httpState.error}/>
             <section>
                 <Search onLoadIngredients={getFilteredIngredientsList}/>
                 <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
