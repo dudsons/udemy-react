@@ -4,7 +4,7 @@ import IngredientForm from './IngredientForm';
 import IngredientList from "./IngredientList";
 import Search from './Search';
 import ErrorModal from "../UI/ErrorModal";
-import ExampleProvider from "../../ExampleProvider";
+import ExampleProvider from "../../extra/useContext/ExampleProvider";
 
 
 const textReducer = (state, action) => {
@@ -61,7 +61,6 @@ function Ingredients() {
     //get start list
     useEffect(() => {
         // setIsIndicator(true);
-        console.log(httpState);
         dispatchHttpState({type: "SEND"});
         fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json")
             .then(
