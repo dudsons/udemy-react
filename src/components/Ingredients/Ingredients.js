@@ -5,6 +5,7 @@ import IngredientList from "./IngredientList";
 import Search from './Search';
 import ErrorModal from "../UI/ErrorModal";
 import ExampleProvider from "../../extra/useContext/ExampleProvider";
+import UseMemoHookExample from "../../extra/useMemo/UseMemoHookExample";
 
 
 const textReducer = (state, action) => {
@@ -143,6 +144,7 @@ function Ingredients() {
                 <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
             </section>
             <ExampleProvider/>
+            <UseMemoHookExample/>
         </div>
     );
 }
