@@ -4,6 +4,8 @@ import IngredientForm from './IngredientForm';
 import IngredientList from "./IngredientList";
 import Search from './Search';
 import ErrorModal from "../UI/ErrorModal";
+import ExampleProvider from "../../ExampleProvider";
+
 
 const textReducer = (state, action) => {
     switch (action.type) {
@@ -141,6 +143,7 @@ function Ingredients() {
                 <Search onLoadIngredients={getFilteredIngredientsList}/>
                 <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
             </section>
+            <ExampleProvider/>
         </div>
     );
 }
