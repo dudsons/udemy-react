@@ -6,6 +6,7 @@ import Search from './Search';
 import ErrorModal from "../UI/ErrorModal";
 import ExampleProvider from "../../extra/useContext/ExampleProvider";
 import UseMemoHookExample from "../../extra/useMemo/UseMemoHookExample";
+import UseCallbackHookExample from "../../extra/useCallback/UseCallbackHookExample";
 
 
 const textReducer = (state, action) => {

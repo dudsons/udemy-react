@@ -6,7 +6,7 @@ import Ingredients from "./components/Ingredients/Ingredients";
 
 const App = props =>{
   const authContext  = useContext(AuthContext);
-  let content = <Auth/>;
+  let content = <Ingredients/>;
 
   if(authContext.isAuth){
     content = <Ingredients/>
