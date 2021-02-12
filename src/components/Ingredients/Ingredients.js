@@ -88,7 +88,7 @@ function Ingredients() {
     }, []);
 
 
-    const addIngredientHandler = (ingredient) => {
+    const addIngredientHandler =useCallback( (ingredient) => {
         // setIsIndicator(true);
         dispatchHttpState({type: "SEND"});
         fetch("https://react-hook-upda-default-rtdb.firebaseio.com/ingredients.json", {
@@ -105,10 +105,10 @@ function Ingredients() {
             // setUserIngredients([...userIngredients, {id: response.name, ...ingredient}]);
             dispatchForIngredients({type: "ADD", ingredient: {id: response.name, ...ingredient}})
         });
-    };
+    },[]);
 
 
-    const removeIngredientFromList = (id) => {
+    const removeIngredientFromList = React.useCallback( (id) => {
         // setIsIndicator(true);
         dispatchHttpState({type: "SEND"});
         fetch(`https://react-hook-upda-default-rtdb.firebaseio.com/ingredients/${id}.json`,
@@ -119,7 +119,7 @@ function Ingredients() {
                     dispatchHttpState({type: "RESPONSE"});
                 }
             );
-    };
+    },[]);
 
     const getFilteredIngredientsList = useCallback((filteredList) => {
         dispatchForIngredients({type: "SET", ingredientsList: filteredList})
@@ -144,8 +144,9 @@ function Ingredients() {
                 <Search onLoadIngredients={getFilteredIngredientsList}/>
                 <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
             </section>
-            <ExampleProvider/>
-            <UseMemoHookExample/>
+            {/*<ExampleProvider/>*/}
+            {/*<UseMemoHookExample/>*/}
+            <UseCallbackHookExample/>
         </div>
     );
 }
