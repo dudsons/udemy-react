@@ -1,4 +1,4 @@
-import React, {useReducer, useState, useEffect, useCallback} from 'react';
+import React, {useReducer, useState, useEffect, useCallback, useMemo} from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from "./IngredientList";
@@ -131,6 +131,12 @@ function Ingredients() {
         dispatchHttpState({type:"CLOSE"})
     };
 
+    const ingredientsList = useMemo(()=>{
+            return(
+                <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
+            )
+    },[userIngredients,removeIngredientFromList]);
+
     return (
         <div className="App">
             <button type="button" onClick={() => {
@@ -142,7 +148,7 @@ function Ingredients() {
             <IngredientForm onAddIngredients={addIngredientHandler} onIndicator={httpState.isIndicator} onError={httpState.error}/>
             <section>
                 <Search onLoadIngredients={getFilteredIngredientsList}/>
-                <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientFromList}/>
+                {ingredientsList}
             </section>
             {/*<ExampleProvider/>*/}
             {/*<UseMemoHookExample/>*/}

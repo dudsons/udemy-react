@@ -2,14 +2,14 @@ import React from 'react';
 
 import './IngredientList.css';
 
-const IngredientList = React.memo (  ({ingredients,onRemoveItem}) => {
+const IngredientList =   (props) => {
     console.log('Rendering IngredientList');
   return (
     <section className="ingredient-list">
       <h2>Loaded Ingredients</h2>
       <ul>
-        {ingredients.map(ig => (
-          <li key={ig.id} onClick={()=>{onRemoveItem(ig.id)}}>
+        {props.ingredients.map(ig => (
+          <li key={ig.id} onClick={()=>{props.onRemoveItem(ig.id)}}>
             <span>{ig.title}</span>
             <span>{ig.amount}x</span>
           </li>
@@ -17,6 +17,6 @@ const IngredientList = React.memo (  ({ingredients,onRemoveItem}) => {
       </ul>
     </section>
   );
-});
+};
 
 export default IngredientList;
